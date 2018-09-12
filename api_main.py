@@ -7,7 +7,7 @@ Created on Mon Sep 10 18:24:13 2018
 from flask import Flask, request
 
 app = Flask(__name__)
-import jsonify
+from flask import jsonify
 from sklearn.externals import joblib
 import numpy as np
 
