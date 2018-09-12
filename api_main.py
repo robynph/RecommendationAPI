@@ -11,8 +11,6 @@ import jsonify
 from sklearn.externals import joblib
 import numpy as np
 
-import scipy
-print(scipy.version)
 
 @app.route("/")
 def hello():
@@ -25,14 +23,17 @@ if __name__ == '__main__':
 TOP_HOW_MANY = 3
 
 
-@app.route("/predict", methods=['POST'])
+@app.route("/recommend", methods=['POST'])
 def predict():
     if request.method == 'POST':
         try:
             data = request.get_json()
             print("Received value of data :: ",data)
-            selectedProducts = list(data["selectedProducts"])
+            
+            selectedProds = data["selectedProducts"]
+            selectedProducts = selectedProds.split(",")
             print("Received value of selectedProducts :: ",selectedProducts)
+            
             
             rules = joblib.load("./apriori_product_recommender.pkl")
         except ValueError:
