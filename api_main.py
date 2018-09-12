@@ -30,9 +30,8 @@ def predict():
             data = request.get_json()
             print("Received value of data :: ",data)
             
-            selectedProds = data["selected"]
-            if(len(selectedProds)>0):
-                selectedProducts = selectedProds.split(",")
+            selectedProducts = data["selectedProducts"]
+            if(len(selectedProducts)>0):
                 print("Received value of selectedProducts :: ",selectedProducts)
             else:
                 return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
