@@ -11,6 +11,8 @@ import jsonify
 from sklearn.externals import joblib
 import numpy as np
 
+import scipy
+print(scipy.version)
 
 @app.route("/")
 def hello():
@@ -29,7 +31,7 @@ def predict():
         try:
             data = request.get_json()
             print("Received value of data :: ",data)
-            selectedProducts = data["selectedProducts"]
+            selectedProducts = list(data["selectedProducts"])
             print("Received value of selectedProducts :: ",selectedProducts)
             
             rules = joblib.load("./apriori_product_recommender.pkl")
