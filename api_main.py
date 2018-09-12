@@ -31,15 +31,20 @@ def predict():
             print("Received value of data :: ",data)
             
             selectedProds = data["selectedProducts"]
-            selectedProducts = selectedProds.split(",")
-            print("Received value of selectedProducts :: ",selectedProducts)
-            
+            if(len(selectedProds)>0):
+                selectedProducts = selectedProds.split(",")
+                print("Received value of selectedProducts :: ",selectedProducts)
+            else:
+                return jsonify("Please provide the selected product names.")
             
             rules = joblib.load("./apriori_product_recommender.pkl")
+            
+            suggestedProducts = recommendProducts(rules, selectedProducts)
+        
         except ValueError:
             return jsonify("Please provide the selected product names.")
 
-        return jsonify(recommendProducts(rules, selectedProducts))
+        return jsonify(suggestedProducts)
 
 #==============================================================================
 # def req_resp_int(selectedProducts):
