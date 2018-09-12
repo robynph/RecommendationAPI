@@ -28,13 +28,23 @@ def genRecommendation():
             data = request.get_json()
             print("Received value of data :: ",data)
             
-            selectedProducts = data["SelectedProducts"]
-            if(len(selectedProducts)>0):
-                print("Received value of selectedProducts :: ",selectedProducts)
-            else:
-                return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
             
-            suggestedProducts,discountPerc = recommend(selectedProducts)
+            if(data["SelectedProducts"]):
+                
+                selectedProducts = data["SelectedProducts"]
+                
+                if(len(selectedProducts)>0):
+                    print("Received value of selectedProducts :: ",selectedProducts)
+                    
+                else:
+                    return jsonify({"Status" : "F", "Message" : "Please provide atleast one selected product name."})
+                
+                suggestedProducts,discountPerc = recommend(selectedProducts)
+            
+            else:
+                return jsonify({"Status" : "F", "Message" : "SelectedProducts paramter not passed"})
+            
+            
         
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
