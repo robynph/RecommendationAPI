@@ -28,7 +28,9 @@ def predict():
     if request.method == 'POST':
         try:
             data = request.get_json()
+            print("Received value of data :: ",data)
             selectedProducts = data["selectedProducts"]
+            print("Received value of selectedProducts :: ",selectedProducts)
             
             rules = joblib.load("./apriori_product_recommender.pkl")
         except ValueError:
