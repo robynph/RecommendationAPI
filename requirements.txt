@@ -5,3 +5,4 @@ numpy==1.14.1
 scipy==1.0.0
 jsonify==0.5
 scikit-learn==0.19.1
+mlxtend==0.13.0
