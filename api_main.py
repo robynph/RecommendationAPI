@@ -37,6 +37,10 @@ def predict():
             else:
                 return jsonify("Please provide the selected product names.")
             
+            selected = data["selected"]
+            print("Received value of selected :: ",selected)
+            print("type of selected :: ",type(selected))
+            
             rules = joblib.load("./apriori_product_recommender.pkl")
             
             suggestedProducts = recommendProducts(rules, selectedProducts)
