@@ -75,7 +75,7 @@ def recommendProducts(rules, selectedProducts):
     'Determing best 3 rules for the selected products'
     top_3_result = result[:TOP_HOW_MANY]
     
-    conse = set()
+    conse = ""
     
     for i in top_3_result['conse']:
     
@@ -83,7 +83,7 @@ def recommendProducts(rules, selectedProducts):
         
         for j in i:
             print(j)
-            conse.add(j)
+            conse += j
             
             if(len(conse)>=3):
                 break
