@@ -3,3 +3,4 @@ gunicorn==19.6.0
 pandas==0.22.0
 numpy==1.14.1
 jsonify==0.5
+sklearn==0.19.1
