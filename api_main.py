@@ -42,7 +42,7 @@ def genRecommendation():
                 suggestedProducts,discountPerc = recommend(selectedProducts)
             
             else:
-                return jsonify({"Status" : "F", "Message" : "SelectedProducts paramter not passed"})
+                return jsonify({"Status" : "F", "Message" : "SelectedProducts parameter not passed"})
             
             
         
@@ -50,5 +50,32 @@ def genRecommendation():
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
 
         return jsonify({"Status" : "S", "SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
+    
 
+@app.route("/loadStoreData", methods=['POST','PUT'])
+def loadStoreData():
+    
+    if request.method == 'POST':
+        try:
+             
+            data = request.get_json()
+            print("Received value of data :: ",data)    
+            
+            if(data["StoreID"]):
+                
+                storeID = data["StoreID"]
+                
+                if(len(storeID)>0):
+                    print("Received value of StoreID :: ",storeID)
+                else:
+                    return jsonify({"Status" : "F", "Message" : "StoreID parameter cannot be blank."})
+                
+            
+            else:
+                return jsonify({"Status" : "F", "Message" : "StoreID parameter not passed"})
 
+        
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
+
+        return jsonify({"Status" : "S"})
