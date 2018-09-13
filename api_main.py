@@ -9,6 +9,7 @@ from flask import Flask, request, jsonify
 from ProductRecommender import recommend
 
 app = Flask(__name__)
+from cStringIO import StringIO
 
 @app.route("/")
 def hello():
@@ -58,12 +59,12 @@ def loadStoreData():
     if request.method == 'POST':
         try:
              
-            data = request.get_json()
-            print("Received value of data :: ",data)    
+            req = request.get_json()
+            print("Received value of req :: ",req)    
             
-            if(data["StoreID"]):
+            if(req["StoreID"]):
                 
-                storeID = data["StoreID"]
+                storeID = req["StoreID"]
                 
                 if(len(storeID)>0):
                     print("Received value of StoreID :: ",storeID)
@@ -74,8 +75,21 @@ def loadStoreData():
             else:
                 return jsonify({"Status" : "F", "Message" : "StoreID parameter not passed"})
 
+            
+            f = request.files['files']
+            if not f:
+                return "No file"
+            file_contents = StringIO(f.stream.read())
+            print("Received file with file contents :: ",file_contents)
+            
+            #result = csv2json(file_contents)
+            #response = make_response(result)
+            #response.headers["Content-Disposition"] = "attachment; filename=Converted.json"
+            #return response
+            
         
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
 
         return jsonify({"Status" : "S"})
+    
