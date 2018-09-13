@@ -37,27 +37,42 @@ def genRecommendation():
             else:
                 return jsonify({"Status" : "F", "Message" : value})
             
-            if(req["SelectedProducts"]):
-                
-                selectedProducts = req["SelectedProducts"]
-                
-                if(len(selectedProducts)>0):
-                    print("Received value of selectedProducts :: ",selectedProducts)
-                    
-                else:
-                    return jsonify({"Status" : "F", "Message" : "Please provide atleast one selected product name."})
-                
-                suggestedProducts,discountPerc = recommend(selectedProducts)
-            
+            flag,value = validator(req, "Ids")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
             else:
-                return jsonify({"Status" : "F", "Message" : "SelectedProducts parameter not passed"})
+                return jsonify({"Status" : "F", "Message" : value})
             
             
+            flag,value = validator(req, "SelectedProducts")
+            if(flag):
+                selectedProducts = value
+                suggestedProducts,discountPerc = recommend(selectedProducts)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+            
+#==============================================================================
+#             if(req["SelectedProducts"]):
+#                 
+#                 selectedProducts = req["SelectedProducts"]
+#                 
+#                 if(len(selectedProducts)>0):
+#                     print("Received value of selectedProducts :: ",selectedProducts)
+#                     
+#                 else:
+#                     return jsonify({"Status" : "F", "Message" : "Please provide atleast one selected product name."})
+#                 
+#                 suggestedProducts,discountPerc = recommend(selectedProducts)
+#             
+#             else:
+#                 return jsonify({"Status" : "F", "Message" : "SelectedProducts parameter not passed"})
+#==============================================================================
         
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
 
-        return jsonify({"Status" : "S", "SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
+        return jsonify({"Status" : "S",  "Ids" : "OrderID1" ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
     
 
 @app.route("/loadStoreData", methods=['POST','PUT'])
