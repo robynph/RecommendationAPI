@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify
 from ProductRecommender import recommend
 
 app = Flask(__name__)
-from cStringIO import StringIO
+#from cStringIO import StringIO
 
 @app.route("/")
 def hello():
@@ -79,8 +79,8 @@ def loadStoreData():
             f = request.files['files']
             if not f:
                 return "No file"
-            file_contents = StringIO(f.stream.read())
-            print("Received file with file contents :: ",file_contents)
+            #file_contents = StringIO(f.stream.read())
+            print("Received file with file contents :: ",f)
             
             #result = csv2json(file_contents)
             #response = make_response(result)
