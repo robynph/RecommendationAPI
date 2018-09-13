@@ -71,7 +71,7 @@ def loadStoreData():
             #file_contents = StringIO(f.stream.read())
             print("Received file with file contents :: ",f)
             
-            reqJSON = req.files["json"]
+            reqJSON = request.files["json"]
             print("reqJSON :: " , reqJSON)
             
             if(reqJSON["StoreID"]):
