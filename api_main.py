@@ -62,6 +62,14 @@ def loadStoreData():
             req = request.get_json()
             print("Received value of req :: ",req)  
             
+            
+            f = request.files['files']
+            if not f:
+                return "No file"
+            #file_contents = StringIO(f.stream.read())
+            print("Received file with file contents :: ",f)
+            
+            
             if(req["StoreID"] is None):
                 
                 storeID = req["StoreID"]
@@ -76,11 +84,7 @@ def loadStoreData():
                 return jsonify({"Status" : "F", "Message" : "StoreID parameter not passed"})
 
             
-            f = request.files['files']
-            if not f:
-                return "No file"
-            #file_contents = StringIO(f.stream.read())
-            print("Received file with file contents :: ",f)
+            
             
             #result = csv2json(file_contents)
             #response = make_response(result)
