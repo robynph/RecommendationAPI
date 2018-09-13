@@ -93,12 +93,12 @@ def loadStoreData():
                 return jsonify({"Status" : "F", "Message" : "Orders parameter not passed"})
 
             
-        
+            message = ("Data for App Id {} uploaded successfully." .format(storeID))
         
         except ValueError:
-            return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
 
-        return jsonify({"Status" : "S"})
+        return jsonify({"Status" : "S","Message" : message})
 
 
 @app.route("/extra", methods=['POST','PUT'])
