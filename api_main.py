@@ -59,8 +59,10 @@ def loadStoreData():
     if request.method == 'POST':
         try:
              
+            print("Received value of request :: ", request)  
+            
             req = request.get_json()
-            print("Received value of req :: ",req)  
+            print("Received value of req :: ", jsonify(req))
             
             
             f = request.files['files']
