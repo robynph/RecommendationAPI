@@ -39,8 +39,8 @@ def genRecommendation():
             
             flag,value = validator(req, "Ids")
             if(flag):
-                app_id = value
-                print("Validated ",app_id)
+                orderId = value
+                print("Validated ",orderId)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
             
@@ -72,7 +72,7 @@ def genRecommendation():
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
 
-        return jsonify({"Status" : "S",  "Ids" : "OrderID1" ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
+        return jsonify({"Status" : "S",  "Ids" : orderId ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
     
 
 @app.route("/loadStoreData", methods=['POST','PUT'])
