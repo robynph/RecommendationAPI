@@ -26,13 +26,20 @@ TOP_HOW_MANY = 3
 def genRecommendation():
     if request.method == 'POST':
         try:
-            data = request.get_json()
-            print("Received value of data :: ",data)
+            req = request.get_json()
+            print("Received value of req :: ",req)
             
             
-            if(data["SelectedProducts"]):
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+            
+            if(req["SelectedProducts"]):
                 
-                selectedProducts = data["SelectedProducts"]
+                selectedProducts = req["SelectedProducts"]
                 
                 if(len(selectedProducts)>0):
                     print("Received value of selectedProducts :: ",selectedProducts)
@@ -69,12 +76,12 @@ def loadStoreData():
                 storeID = req["app_id"]
                 
                 if(len(storeID)>0):
-                    print("Received value of StoreID :: ",storeID)
+                    print("Received value of App ID :: ",storeID)
                 else:
-                    return jsonify({"Status" : "F", "Message" : "StoreID parameter cannot be blank."})
+                    return jsonify({"Status" : "F", "Message" : "App ID parameter cannot be blank."})
                 
             else:
-                return jsonify({"Status" : "F", "Message" : "StoreID parameter not passed"})
+                return jsonify({"Status" : "F", "Message" : "App ID parameter not passed"})
 
             if(req["Orders"]):
                 
@@ -141,3 +148,27 @@ def extra():
 
         return jsonify({"Status" : "S"})
     
+
+def validator(req, parameterName):
+    
+    flag = False
+    value = ""
+    
+    print("Validating value received for ",parameterName)
+    
+    if(req[parameterName]):
+        
+        value = req[parameterName]
+                
+        if(len(value)>0):
+            
+            print("Received value of parameter :: ",value)
+            flag = True
+        
+        else:
+            value = ('%s parameter cannot be blank.'.format(parameterName))
+    
+    else:
+        value = ('%s parameter not passed.'.format(parameterName))
+    
+    return flag,value
