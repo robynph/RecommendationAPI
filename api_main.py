@@ -51,24 +51,7 @@ def genRecommendation():
                 suggestedProducts,discountPerc = recommend(selectedProducts)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
-            
-#==============================================================================
-#             if(req["SelectedProducts"]):
-#                 
-#                 selectedProducts = req["SelectedProducts"]
-#                 
-#                 if(len(selectedProducts)>0):
-#                     print("Received value of selectedProducts :: ",selectedProducts)
-#                     
-#                 else:
-#                     return jsonify({"Status" : "F", "Message" : "Please provide atleast one selected product name."})
-#                 
-#                 suggestedProducts,discountPerc = recommend(selectedProducts)
-#             
-#             else:
-#                 return jsonify({"Status" : "F", "Message" : "SelectedProducts parameter not passed"})
-#==============================================================================
-        
+
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
 
@@ -86,41 +69,72 @@ def loadStoreData():
             req = request.get_json()
             print("Received value of req :: ", jsonify(req))
             
-            if(req["app_id"]):
-                
-                storeID = req["app_id"]
-                
-                if(len(storeID)>0):
-                    print("Received value of App ID :: ",storeID)
-                else:
-                    return jsonify({"Status" : "F", "Message" : "App ID parameter cannot be blank."})
-                
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
             else:
-                return jsonify({"Status" : "F", "Message" : "App ID parameter not passed"})
-
-            if(req["Orders"]):
+                return jsonify({"Status" : "F", "Message" : value})
+            
+            
+            flag,value = validator(req, "Orders")
+            if(flag):
                 
-                orders = req["Orders"]
+                orders = value
                 
-                if(len(orders)>0):
-                    print("Received value of orders :: ",orders)
-                    
-                    for eachOrder in orders:
+                for eachOrder in orders:
                         print(eachOrder["Ids"],eachOrder["line_items"])
-                    
-                else:
-                    return jsonify({"Status" : "F", "Message" : "Orders parameter cannot be blank."})
-                
+                        
+                print("Validated ",app_id)
             else:
-                return jsonify({"Status" : "F", "Message" : "Orders parameter not passed"})
+                return jsonify({"Status" : "F", "Message" : value})
 
             
-            message = ("Data for App Id {} uploaded successfully." .format(storeID))
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
         
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
 
         return jsonify({"Status" : "S","Message" : message})
+    
+    
+    
+@app.route("/feedback", methods=['POST'])
+def feedback():
+    
+    try:
+         
+        req = request.get_json()
+        print("Received value of req :: ",req)
+        
+        
+        flag,value = validator(req, "app_id")
+        if(flag):
+            app_id = value
+            print("Validated ",app_id)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        flag,value = validator(req, "Ids")
+        if(flag):
+            orderId = value
+            print("Validated ",orderId)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        
+        flag,value = validator(req, "SelectedProducts")
+        if(flag):
+            selectedProducts = value
+            suggestedProducts,discountPerc = recommend(selectedProducts)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+    
+    except ValueError:
+        return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+    return jsonify({"Status" : "S"})
+
 
 
 @app.route("/extra", methods=['POST','PUT'])
