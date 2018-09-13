@@ -30,7 +30,7 @@ def genRecommendation():
             print("Received value of data :: ",data)
             
             
-            if(data["SelectedProducts"]):
+            if(data["SelectedProducts"] is None):
                 
                 selectedProducts = data["SelectedProducts"]
                 
@@ -62,9 +62,7 @@ def loadStoreData():
             req = request.get_json()
             print("Received value of req :: ",req)  
             
-            print("check ::",req["StoreID"])
-            
-            if(req["StoreID"]):
+            if(req["StoreID"] is None):
                 
                 storeID = req["StoreID"]
                 
