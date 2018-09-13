@@ -64,6 +64,51 @@ def loadStoreData():
             req = request.get_json()
             print("Received value of req :: ", jsonify(req))
             
+            if(req["app_id"]):
+                
+                storeID = req["app_id"]
+                
+                if(len(storeID)>0):
+                    print("Received value of StoreID :: ",storeID)
+                else:
+                    return jsonify({"Status" : "F", "Message" : "StoreID parameter cannot be blank."})
+                
+            else:
+                return jsonify({"Status" : "F", "Message" : "StoreID parameter not passed"})
+
+            if(req["Orders"]):
+                
+                orders = req["Orders"]
+                
+                if(len(orders)>0):
+                    print("Received value of StoreID :: ",orders)
+                    
+                else:
+                    return jsonify({"Status" : "F", "Message" : "Orders parameter cannot be blank."})
+                
+            else:
+                return jsonify({"Status" : "F", "Message" : "Orders parameter not passed"})
+
+            
+        
+        
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
+
+        return jsonify({"Status" : "S"})
+
+
+@app.route("/extra", methods=['POST','PUT'])
+def extra():
+    
+    if request.method == 'POST':
+        try:
+             
+            print("Received value of request :: ", request)  
+            
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+            
             
             f = request.files['files']
             if not f:
@@ -87,14 +132,6 @@ def loadStoreData():
             else:
                 return jsonify({"Status" : "F", "Message" : "StoreID parameter not passed"})
 
-            
-            
-            
-            #result = csv2json(file_contents)
-            #response = make_response(result)
-            #response.headers["Content-Disposition"] = "attachment; filename=Converted.json"
-            #return response
-            
         
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
