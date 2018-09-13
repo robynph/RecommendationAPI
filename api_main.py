@@ -81,7 +81,10 @@ def loadStoreData():
                 orders = req["Orders"]
                 
                 if(len(orders)>0):
-                    print("Received value of StoreID :: ",orders)
+                    print("Received value of orders :: ",orders)
+                    
+                    for eachOrder in orders:
+                        print(eachOrder["Ids"],eachOrder["line_items"])
                     
                 else:
                     return jsonify({"Status" : "F", "Message" : "Orders parameter cannot be blank."})
