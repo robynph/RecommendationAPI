@@ -177,8 +177,9 @@ def extra():
 def qsetup():
 
     if request.method == 'POST':
+        try:
 
-    try:
+        print("Received value of request :: ", request)
 
         req = request.get_json()
         print("Received value of req :: ", jsonify(req))
