@@ -197,7 +197,7 @@ def qsetup():
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
 
-        return jsonify({"Status" : "S","Message" : message})
+        return jsonify({"Status" : "S","Message" : message : questionnaire})
 
 
 def validator(req, parameterName):
