@@ -173,7 +173,7 @@ def extra():
         return jsonify({"Status" : "S"})
 
 
-@app.route("/qsetup", methods=['POST'])
+@app.route("/qsetup", methods=['POST', 'PUT'])
 def qsetup():
 
     if request.method == 'POST':
