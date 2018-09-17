@@ -192,6 +192,7 @@ def qsetup():
                 return jsonify({"Status" : "F", "Message" : value})
 
             message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            questionnaire = ({"app_id" : app_id , "Questions" : [{"Q1" : "What is the maximum weight of each bundle?"},{"Q2" : "What is the maximum number of products to bundle?"},{"Q3" : "What is the flat discount to apply?"}]})
 
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
