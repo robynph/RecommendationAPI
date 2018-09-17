@@ -177,15 +177,10 @@ def extra():
 def qsetup():
 
     if request.method == 'POST':
-        try:
 
         print("Received value of request :: ", request)
 
-        req = request.get_json()
-        print("Received value of req :: ", jsonify(req))
-
-        return jsonify({"app_id" : req , "Questions" : [{"Q1" : "What is the maximum weight of each bundle?"},{"Q2" : "What is the maximum number of products to bundle?"},{"Q3" : "What is the flat discount to apply?"}]})
-
+    
 
 
 def validator(req, parameterName):
