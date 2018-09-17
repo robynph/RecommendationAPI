@@ -176,12 +176,21 @@ def extra():
 @app.route("/qsetup", methods=['POST', 'PUT'])
 def qsetup():
 
-    if request.method == 'POST':
+        if request.method == 'POST':
+            try:
 
-        req = request.get_json()
-        print("Received value of req :: ", jsonify(req))
+                print("Received value of request :: ", request)
 
-    
+                req = request.get_json()
+                print("Received value of req :: ", jsonify(req))
+
+                message = ("Data for App Id {} uploaded successfully." .format(app_id))
+
+            except ValueError:
+                return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+            return jsonify({"Status" : "S","Message" : message})
+
 
 
 def validator(req, parameterName):
