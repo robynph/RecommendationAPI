@@ -178,7 +178,8 @@ def qsetup():
 
     if request.method == 'POST':
 
-        print("Received value of request :: ", request)
+        req = request.get_json()
+        print("Received value of req :: ", jsonify(req))
 
     
 
