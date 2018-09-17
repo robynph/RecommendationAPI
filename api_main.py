@@ -173,27 +173,12 @@ def extra():
         return jsonify({"Status" : "S"})
 
 
-@app.route("/qsetup", methods=['POST'])
+@app.route("/qsetup", methods=['GET'])
 def qsetup():
 
-
-    if request.method == 'POST':
-        try:
-
-            print("Received request for questionnaire :: ", request)
-
-            req = request.get_json()
-            print("Received value of req :: ", jsonify(req))
-
-            flag,value = validator(req, "app_id")
-            if(flag):
-                app_id = value
-                print("Validated ",app_id)
-            else:
-                return jsonify({"Status" : "F", "Message" : value})
-
+    if request.method == 'GET':
         return jsonify({"app_id" : "App Id1" , "Questions" : [{"Q1" : "What is the maximum weight of each bundle?"},{"Q2" : "What is the maximum number of products to bundle?"},{"Q3" : "What is the flat discount to apply?"}]})
-        
+
 
 def validator(req, parameterName):
 
