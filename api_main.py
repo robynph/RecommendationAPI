@@ -33,7 +33,6 @@ def loadStoreData():
                 app_id = value
                 print("Validated ",app_id)
             else:
-                app_id = value
                 return jsonify({"Status" : "F", "Message" : value})
 
             flag,value = validator(req, "Orders")
