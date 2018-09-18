@@ -225,6 +225,33 @@ def qanswers():
 
         return jsonify({"Status" : "S","Message" : message})
 
+@app.route("/revtable", methods=['POST', 'PUT'])
+def revtable():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            tabledata = {"app_id":"appID","period":{"Week 1":{"Order Count":"150","Total Bundles Recommended":"1500","Total Bundles Purchased":"250","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 2":{"Order Count":"300","Total Bundles Recommended":"2000","Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 3":{"Order Count":"250","Total Bundles Recommended":"1700","Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 4":{"Order Count":"300","Total Bundles Recommended":"2500","Total Bundles Purchased":"750","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},}}
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message : tabledata})
+
+
 def validator(req, parameterName):
 
     flag = False
