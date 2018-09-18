@@ -287,33 +287,6 @@ def revChart():
 
         return jsonify({"Status" : "S","Message" : message, "Chart Data" : chartdata})
 
-@app.route("/confirmPurchase", methods=['POST', 'PUT'])
-def confirmPurchase():
-
-    if request.method == 'POST':
-        try:
-
-            print("Received value of request :: ", request)
-
-            req = request.get_json()
-            print("Received value of req :: ", jsonify(req))
-
-            flag,value = validator(req, "app_id")
-            if(flag):
-                app_id = value
-
-                print("Validated ",app_id)
-            else:
-                return jsonify({"Status" : "F", "Message" : value})
-
-            message = ("Data for App Id {} uploaded successfully." .format(app_id))
-
-        except ValueError:
-            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
-
-        return jsonify({"Status" : "S","Message" : message})
-
-
 
 def validator(req, parameterName):
 
