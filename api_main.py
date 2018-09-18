@@ -173,8 +173,8 @@ def extra():
         return jsonify({"Status" : "S"})
 
 
-@app.route("/qsetup", methods=['POST', 'PUT'])
-def qsetup():
+@app.route("/qSetup", methods=['POST', 'PUT'])
+def qSetup():
 
     if request.method == 'POST':
         try:
@@ -200,8 +200,8 @@ def qsetup():
         return jsonify({"Status" : "S","Message" : message,"Questions" : ques})
 
 
-@app.route("/qanswers", methods=['POST', 'PUT'])
-def qanswers():
+@app.route("/qAnswers", methods=['POST', 'PUT'])
+def qAnswers():
 
     if request.method == 'POST':
         try:
@@ -225,8 +225,8 @@ def qanswers():
 
         return jsonify({"Status" : "S","Message" : message})
 
-@app.route("/revtable", methods=['POST', 'PUT'])
-def revtable():
+@app.route("/revTable", methods=['POST', 'PUT'])
+def revTable():
 
     if request.method == 'POST':
         try:
