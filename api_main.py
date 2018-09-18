@@ -281,11 +281,41 @@ def revChart():
             "Week 6":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
             "Week 7":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
             "Week 8":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"},}})
-                        
+
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
 
         return jsonify({"Status" : "S","Message" : message, "Chart Data" : chartdata})
+
+@app.route("/confirmPurchase", methods=['POST', 'PUT'])
+def confirmPurchase():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value, confirm = validator(req, "app_id", "Purchased")
+            if(flag):
+                app_id = value
+                Purchased = confirm
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value, "Purchased" : confirm})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message, "Purchased" : confirm})
+
+
+
+
 
 
 def validator(req, parameterName):
