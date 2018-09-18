@@ -273,14 +273,15 @@ def revChart():
                 return jsonify({"Status" : "F", "Message" : value})
 
             message = ("Data for App Id {} uploaded successfully." .format(app_id))
-            chartdata = ({"app_id":"appID","actual":{"Week 1":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, /
-            "Week 2":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, /
-            "Week 3":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, /
-            "Week 4":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, /
-            },"forecast":{"Week 5":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, /
-            "Week 6":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, /
-            "Week 7":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, /
+            chartdata = ({"app_id":"appID","actual":{"Week 1":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 2":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 3":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 4":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            },"forecast":{"Week 5":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 6":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 7":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
             "Week 8":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"},}})
+                        
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
 
