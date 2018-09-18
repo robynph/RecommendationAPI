@@ -291,7 +291,7 @@ def revChart():
 def validator(req, parameterName):
 
     flag = False
-    value = ""
+    value = None
 
     print("Validating value received for ",parameterName)
 
