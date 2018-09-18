@@ -175,8 +175,7 @@ def extra():
 def validator(req, parameterName):
 
     flag = False
-    value = ""
-
+    
     print("Validating value received for ",parameterName)
 
     if(req[parameterName]):
