@@ -28,7 +28,18 @@ def loadStoreData():
 
             req = request.get_json()
             print("Received value of req :: ", jsonify(req))
+            
+            #Viraj1
+            app_id = value
+            print("Validated ",app_id)
+            
+            orders = value
+            for eachOrder in orders:
+                        print(eachOrder["Ids"],eachOrder["line_items"])
 
+            print("Validated ",app_id)
+            
+'''
             flag,value = validator(req, "app_id")
             if(flag):
                 app_id = value
@@ -48,7 +59,7 @@ def loadStoreData():
             else:
                 return jsonify({"Status" : "F", "Message" : value})
 
-
+'''
             message = ("Data for App Id {} uploaded successfully." .format(app_id))
 
         except ValueError:
