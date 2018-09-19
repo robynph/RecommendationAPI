@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Sep 10 18:24:13 2018
+
 @author: Monika Asawa
 """
 from flask import Flask, request, jsonify
@@ -170,6 +171,149 @@ def extra():
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
 
         return jsonify({"Status" : "S"})
+
+
+@app.route("/qSetup", methods=['POST', 'PUT'])
+def qSetup():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            ques = ({"app_id" : app_id , "Questions" : [{"Q1" : "What is the maximum weight of each bundle?"},{"Q2" : "What is the maximum number of products to bundle?"},{"Q3" : "What is the flat discount to apply?"}]})
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message,"Questions" : ques})
+
+
+@app.route("/qAnswers", methods=['POST', 'PUT'])
+def qAnswers():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message})
+
+@app.route("/revTable", methods=['POST', 'PUT'])
+def revTable():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            tabledata = ({"app_id":app_id,"period":{"Week 1":{"Order Count":"150","Total Bundles Recommended":"1500","Total Bundles Purchased":"250","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 2":{"Order Count":"300","Total Bundles Recommended":"2000", \
+            "Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 3":{"Order Count":"250","Total Bundles Recommended":"1700","Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"}, \
+            "Week 4":{"Order Count":"300","Total Bundles Recommended":"2500","Total Bundles Purchased":"750","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"}}})
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message, "Table Data" : tabledata})
+
+
+@app.route("/revChart", methods=['POST', 'PUT'])
+def revChart():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            chartdata = ({"app_id":"appID","actual":{"Week 1":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 2":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 3":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 4":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            },"forecast":{"Week 5":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 6":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 7":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 8":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"},}})
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message, "Chart Data" : chartdata})
+
+
+
+@app.route("/confirmPurchase", methods=['POST', 'PUT'])
+def confirmPurchase():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message})
 
 
 def validator(req, parameterName):
