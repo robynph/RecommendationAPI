@@ -12,6 +12,9 @@ from mlxtend.frequent_patterns import apriori
 from mlxtend.frequent_patterns import association_rules
 from sklearn.externals import joblib
 
+import os
+
+
 TOP_HOW_MANY = 3
 
 def encode_units(x):
@@ -25,11 +28,15 @@ def getOrderData(app_ID, ordersDF):
     'Step 2: Generate Rules'
     'Step 3: Store the rules in pickle format in the folder created in step 1'
     
-    'Step 2'
+    'Step 1'
+    if not (os.path.isdir(app_ID)):
+        os.mkdir(app_ID)
     
+    'Step 2'
     rules = generateRules(ordersDF)
-
-    joblib.dump(rules, "apriori_product_recommender_Viraj.pkl")
+    
+    'Step 3'
+    joblib.dump(rules, app_ID + "/apriori_product_recommender_Viraj.pkl")
     
 
 def generateRules(orders):
@@ -75,6 +82,9 @@ def generateRules(orders):
     
     'Converting lift(float) to lift(int)'
     rules['lift'] = rules['lift'].apply(lambda x: int(x))
+    
+    print("Shape of rules data : ", np.shape(rules))
+    print("Printing top 5 rules generated", rules.head())
     
     return rules
 
