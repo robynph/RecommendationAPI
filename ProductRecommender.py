@@ -108,18 +108,20 @@ def generateRules(orders):
 #joblib.dump(rules, "apriori_product_recommender.pkl")
 
 
-def recommend(selectedProducts):
+def recommend(app_id, selproductDF):
     
-    rules = joblib.load("./apriori_product_recommender.pkl")
-    suggestedProducts = recommendProducts(rules, selectedProducts)
+    rules = joblib.load(app_id + "/apriori_product_recommender_Viraj.pkl")
+    suggestedProducts = recommendProducts(rules, selproductDF)
     
     #Dummy value
     discountPerc = 15
     
     return suggestedProducts,discountPerc
 
-def recommendProducts(rules, selectedProducts):
+def recommendProducts(rules, selproductDF):
     
+    selectedProducts = []
+    selectedProducts = selproductDF['SKU'].tolist
     orderedProducts = frozenset((selectedProducts))
     
     'extracting rules which has selected products as antecedents'

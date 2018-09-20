@@ -82,26 +82,40 @@ def genRecommendation():
                 print("Validated ",app_id)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
-            
+            '''
             flag,value = validator(req, "Ids")
             if(flag):
                 orderId = value
                 print("Validated ",orderId)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
+            '''
             
-            
-            flag,value = validator(req, "SelectedProducts")
+            flag,value = validator(req, "products")
             if(flag):
                 selectedProducts = value
-                suggestedProducts,discountPerc = recommend(selectedProducts)
+                
+                df = pd.DataFrame(columns=['ProductID','Title','VariantID','SKU'])
+                count = 0
+                for eachProduct in selectedProducts:
+                    productid = eachProduct['id']
+                    title = eachProduct['title']
+                    
+                    variants = eachProduct['variants']
+                    for item in variants:
+                        df.loc[count] = [productid, title, item['id'],item['sku']]
+                        count+=1
+                    
+                #print("df :: ", df)
+                
+                suggestedProducts,discountPerc = recommend(app_id,df)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
 
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
 
-        return jsonify({"Status" : "S",  "Ids" : orderId ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
+        return jsonify({"Status" : "S" ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
        
     
 @app.route("/feedback", methods=['POST'])
@@ -201,9 +215,9 @@ def validator(req, parameterName):
             flag = True
         
         else:
-            value = ('%s parameter cannot be blank.'.format(parameterName))
+            value = ('{}.format parameter cannot be blank.'.format(parameterName))
     
     else:
-        value = ('%s parameter not passed.'.format(parameterName))
+        value = ('{}.format parameter not passed.'.format(parameterName))
     
     return flag,value
