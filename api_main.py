@@ -7,8 +7,8 @@ Created on Tue Sep 18 14:36:42 2018
 
 from flask import Flask, request, jsonify
 
-from ProductRecommender import recommend
-
+from ProductRecommender import recommend, getOrderData
+import pandas as pd
 app = Flask(__name__)
 
 @app.route("/")
@@ -37,13 +37,23 @@ def loadStoreData():
             else:
                 return jsonify({"Status" : "F", "Message" : value})
             
-            flag,value = validator(req, "Orders")
+            flag,value = validator(req, "orders")
             if(flag):
                 
                 orders = value
                 
+                print("Total orders :: ",len(orders))
+                df = pd.DataFrame(columns=['Order ID', 'SKU'])
+                count = 0
                 for eachOrder in orders:
-                        print(eachOrder["Ids"],eachOrder["line_items"])
+                    orderId = eachOrder['id']
+                    lineItems = eachOrder['line_items']
+                    
+                    for item in lineItems:
+                        df.loc[count] = [orderId, item['sku']]
+                        count+=1
+                        
+                getOrderData(app_id, df)
                         
                 print("Validated ",app_id)
             else:

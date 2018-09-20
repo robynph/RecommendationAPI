@@ -20,21 +20,26 @@ def encode_units(x):
     if x >= 1:
         return 1
 
-def generateRules():
+def getOrderData(app_ID, ordersDF):
+    'Step 1: Generate folder for the received app ID if it doesnot exist'
+    'Step 2: Generate Rules'
+    'Step 3: Store the rules in pickle format in the folder created in step 1'
     
-    ordersDf = pd.read_csv('SuperStoreData.csv')
+    'Step 2'
     
-    'Focussing on Furniture Category only'
-    ordersDf = ordersDf.loc[ordersDf['Category'] == 'Furniture']
+    rules = generateRules(ordersDF)
+
+    joblib.dump(rules, "apriori_product_recommender_Viraj.pkl")
     
-    orders =  pd.DataFrame(ordersDf, columns=['Order ID','Product Name'])
+
+def generateRules(orders):
     
     print("Shape of orders data : ", np.shape(orders))
     
     'Removing the records which doesnt have OrderID'
     orders.dropna(axis=0, subset=['Order ID'], inplace=True)
     
-    basket = pd.crosstab(orders['Order ID'],orders['Product Name'])
+    basket = pd.crosstab(orders['Order ID'],orders['SKU'])
     
     basket_sb = basket.applymap(encode_units)
     
@@ -72,11 +77,6 @@ def generateRules():
     rules['lift'] = rules['lift'].apply(lambda x: int(x))
     
     return rules
-
-#----------------------------
-#rules = generateRules()
-#----------------------------
-
 
 
 #==============================================================================
