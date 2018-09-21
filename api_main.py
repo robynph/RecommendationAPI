@@ -95,7 +95,7 @@ def genRecommendation():
                     variants = eachProduct['variants']
                     
                     for item in variants:
-                        df.loc[count] = item['sku']
+                        df.loc[count] = [item['sku']]
                         #tempList.append(df.loc[count])                              
                         count+=1
                 
