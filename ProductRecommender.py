@@ -36,7 +36,7 @@ def getOrderData(app_ID, ordersDF):
     rules = generateRules(ordersDF)
     
     'Step 3'
-    joblib.dump(rules, app_ID + "/apriori_product_recommender_Viraj.pkl")
+    joblib.dump(rules, app_ID + "/apriori_product_recommender.pkl")
     
 
 def generateRules(orders):
@@ -108,21 +108,19 @@ def generateRules(orders):
 #joblib.dump(rules, "apriori_product_recommender.pkl")
 
 
-def recommend(app_id, selproductDF):
+def recommend(app_id, listselprod):
     
-    rules = joblib.load(app_id + "/apriori_product_recommender_Viraj.pkl")
-    suggestedProducts = recommendProducts(rules, selproductDF)
+    rules = joblib.load(app_id + "/apriori_product_recommender.pkl")
+    suggestedProducts = recommendProducts(rules, listselprod)
     
     #Dummy value
     discountPerc = 15
     
     return suggestedProducts,discountPerc
 
-def recommendProducts(rules, selproductDF):
+def recommendProducts(rules, listselprod):
     
-    selectedProducts = []
-    selectedProducts = selproductDF['SKU'].tolist
-    orderedProducts = frozenset((selectedProducts))
+    orderedProducts = frozenset((listselprod))
     
     'extracting rules which has selected products as antecedents'
     prodRules = rules[ rules['antecedents'] == orderedProducts ]
@@ -139,15 +137,15 @@ def recommendProducts(rules, selproductDF):
     'Determing best 3 rules for the selected products'
     top_3_result = result[:TOP_HOW_MANY]
     
-    conse = ""
+    conse = []
     
     for i in top_3_result['conse']:
     
-        print(i)
+        print("Conse :: ",i)
         
         for j in i:
-            print(j)
-            conse += j
+            print("Conse item :: ",j)
+            conse.append(j)
             
             if(len(conse)>=3):
                 break
@@ -155,5 +153,5 @@ def recommendProducts(rules, selproductDF):
         if(len(conse)>=3):
             break
     
-    return conse
+    print( conse)   
 

@@ -82,15 +82,7 @@ def genRecommendation():
                 print("Validated ",app_id)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
-            '''
-            flag,value = validator(req, "Ids")
-            if(flag):
-                orderId = value
-                print("Validated ",orderId)
-            else:
-                return jsonify({"Status" : "F", "Message" : value})
-            '''
-            
+                       
             flag,value = validator(req, "products")
             if(flag):
                 selectedProducts = value
@@ -105,10 +97,10 @@ def genRecommendation():
                     for item in variants:
                         df.loc[count] = [productid, title, item['id'],item['sku']]
                         count+=1
-                    
-                #print("df :: ", df)
-                
-                suggestedProducts,discountPerc = recommend(app_id,df)
+                                
+                tempList = []
+                tempList.append(df['SKU'])
+                suggestedProducts,discountPerc = recommend(app_id,tempList)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
 
