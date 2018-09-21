@@ -86,18 +86,18 @@ def genRecommendation():
             flag,value = validator(req, "products")
             if(flag):
                 selectedProducts = value
+                tempList = []
                 
-                df = pd.DataFrame(columns=['SKU'])
-                count = 0
+                #df = pd.DataFrame(columns=['SKU'])
+                #count = 0
                 for eachProduct in selectedProducts:
                                       
                     variants = eachProduct['variants']
                     for item in variants:
-                        df.loc[count] = [item['sku']]
-                        count+=1
-                                
-                tempList = []
-                tempList.append(df['SKU'])
+                        tempList.appen(item)
+                        #df.loc[count] = [item['sku']]
+                        #count+=1
+                                              
                 suggestedProducts,discountPerc = recommend(app_id,tempList)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
