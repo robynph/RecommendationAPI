@@ -33,8 +33,7 @@ def getOrderData(app_ID, ordersDF):
         os.mkdir(app_ID)
     
     'Step 2'
-    rules = generateRules(ordersDF)
-    
+    rules = generateRules(ordersDF)    
     'Step 3'
     joblib.dump(rules, app_ID + "/apriori_product_recommender.pkl")
     
@@ -111,6 +110,7 @@ def generateRules(orders):
 def recommend(app_id, listselprod):
     
     rules = joblib.load(app_id + "/apriori_product_recommender.pkl")
+                        
     suggestedProducts = recommendProducts(rules, listselprod)
     
     #Dummy value
