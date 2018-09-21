@@ -154,5 +154,5 @@ def recommendProducts(rules, listselprod):
         if(len(conse)>=3):
             break
     
-    print( conse)   
-
+    print(conse)   
+    return conse
