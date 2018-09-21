@@ -97,12 +97,12 @@ def genRecommendation():
                     
                     for item in variants:
                         print("items ::", [item['sku']])
-                        df.loc[count] = [item['sku']]
-                        tempList.append(df.loc[count])                              
+                        #df.loc[count] = [item['sku']]
+                        tempList.append([item['sku']])                              
                         count+=1
                        
-                print(df)
-                print(tempList)
+                #print(df)
+                print("templist ::", tempList)
                 suggestedProducts,discountPerc = recommend(app_id,tempList)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
