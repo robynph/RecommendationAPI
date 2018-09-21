@@ -108,7 +108,7 @@ def generateRules(orders):
 
 
 def recommend(app_id, listselprod):
-    print(app_id + "/apriori_product_recommender_Viraj.pkl")
+    print("/apriori_product_recommender_Viraj.pkl")
     rules = joblib.load(app_id + "/apriori_product_recommender_Viraj.pkl")
                         
     suggestedProducts = recommendProducts(rules, listselprod)
