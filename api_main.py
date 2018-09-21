@@ -192,7 +192,35 @@ def qSetup():
                 return jsonify({"Status" : "F", "Message" : value})
 
             message = ("Data for App Id {} uploaded successfully." .format(app_id))
-            ques = ({"app_id" : app_id , "Questions" : [{"Q1" : "What is the maximum weight of each bundle?"},{"Q2" : "What is the maximum number of products to bundle?"},{"Q3" : "What is the flat discount to apply?"}]})
+            ques = ({"app_id" : app_id , "Questions" : [{
+    "Message": "Data for App Id test uploaded successfully.",
+    "Questions": {
+        "Questions": [
+            {
+                "Q1": "What will be the flat rate discount?",
+                "Type": "float",
+                "Range": "0-100",
+                "A1": "answer",
+            },
+            {
+                "Q2": "Which items (if any) will have modified discounts?",
+                "Type": "JSON (python dictionary)",
+                "Key": "string (ID) - product picker",
+                "Table Format": "polaris comp table to add new line"
+                "Value": "Type:float,Range:0-100",
+                "A2": "answer",
+            },
+            {
+                "Q3": "Which items will be exluded from any bundle?",
+                "Type": "stack, dynamic list"
+                "Key": "string (ID) - product picker"
+                "Table Format": "polaris comp table to add new line"
+                "A3": "answer",
+            }
+        ],
+        "app_id": "test"
+    },
+})
 
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
