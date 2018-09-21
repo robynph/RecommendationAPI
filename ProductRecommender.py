@@ -35,8 +35,8 @@ def getOrderData(app_ID, ordersDF):
     'Step 2'
     rules = generateRules(ordersDF)    
     'Step 3'
-    joblib.dump(rules, app_ID + "/apriori_product_recommender.pkl")
-    
+    joblib.dump(rules, app_ID + "/apriori_product_recommender_Viraj.pkl")
+    print(app_ID + "/apriori_product_recommender_Viraj.pkl")
 
 def generateRules(orders):
     
@@ -108,8 +108,8 @@ def generateRules(orders):
 
 
 def recommend(app_id, listselprod):
-    
-    rules = joblib.load(app_id + "/apriori_product_recommender.pkl")
+    print(app_id + "/apriori_product_recommender_Viraj.pkl")
+    rules = joblib.load(app_id + "/apriori_product_recommender_Viraj.pkl")
                         
     suggestedProducts = recommendProducts(rules, listselprod)
     
