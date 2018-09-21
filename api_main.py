@@ -50,6 +50,7 @@ def loadStoreData():
                     lineItems = eachOrder['line_items']
                     
                     for item in lineItems:
+                        print("items ::", item['sku'])
                         df.loc[count] = [orderId, item['sku']]
                         count+=1
                         
