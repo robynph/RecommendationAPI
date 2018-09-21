@@ -87,15 +87,13 @@ def genRecommendation():
             if(flag):
                 selectedProducts = value
                 
-                df = pd.DataFrame(columns=['ProductID','Title','VariantID','SKU'])
+                df = pd.DataFrame(columns=['SKU'])
                 count = 0
                 for eachProduct in selectedProducts:
-                    productid = eachProduct['id']
-                    title = eachProduct['title']
-                    
+                                      
                     variants = eachProduct['variants']
                     for item in variants:
-                        df.loc[count] = [productid, title, item['id'],item['sku']]
+                        df.loc[count] = [item['sku']]
                         count+=1
                                 
                 tempList = []
