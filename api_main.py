@@ -94,11 +94,13 @@ def genRecommendation():
                 for eachProduct in selectedProducts:
                     variants = eachProduct['variants']
                     
+                    print("variants ::", variants)
+                    '''
                     for item in variants:
                         df.loc[count] = [item['sku']]
                         #tempList.append(df.loc[count])                              
                         count+=1
-                
+                    '''    
                 print(df)
                 print(tempList)
                 suggestedProducts,discountPerc = recommend(app_id,tempList)
