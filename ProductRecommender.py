@@ -77,8 +77,8 @@ def generateRules(orders):
     
     #----------------------------------------------------------------------
     'Lift should be minimum 6 and confidence should be 80%'
-    rules = rules[ (rules['lift'] >= 6) & (rules['confidence'] >= 0.8)]
-    
+    #rules = rules[ (rules['lift'] >= 6) & (rules['confidence'] >= 0.8)]
+    rules = rules[ (rules['lift'] >= 1) & (rules['confidence'] >= 0.1)]
     'Converting lift(float) to lift(int)'
     rules['lift'] = rules['lift'].apply(lambda x: int(x))
     
