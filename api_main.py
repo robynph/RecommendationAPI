@@ -86,15 +86,15 @@ def genRecommendation():
             flag,value = validator(req, "products")
             if(flag):
                 selectedProducts = value
-                tempList = []
-                
-                df = pd.DataFrame(columns=['SKU'])
+                tempList = []                
+                df = pd.DataFrame()
                 count = 0
+                
                 for eachProduct in selectedProducts:
-                                      
                     variants = eachProduct['variants']
+                    
                     for item in variants:
-                        df.loc[count] = [item['sku']]
+                        df.loc[count] = item['sku']
                         tempList.append(df.loc[count])                              
                         count+=1
                 
