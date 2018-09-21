@@ -94,7 +94,7 @@ def genRecommendation():
                 for eachProduct in selectedProducts:
                     variants = eachProduct['variants']
                     
-                    print("variants ::", variants)
+                    print("variants ::", variants['sku'])
                     '''
                     for item in variants:
                         df.loc[count] = [item['sku']]
