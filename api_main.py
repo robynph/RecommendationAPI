@@ -88,16 +88,18 @@ def genRecommendation():
                 selectedProducts = value
                 tempList = []
                 
-                #df = pd.DataFrame(columns=['SKU'])
-                #count = 0
+                df = pd.DataFrame(columns=['SKU'])
+                count = 0
                 for eachProduct in selectedProducts:
                                       
                     variants = eachProduct['variants']
                     for item in variants:
-                        tempList.append(item['sku'])
-                        #df.loc[count] = [item['sku']]
-                        #count+=1
-                                              
+                        df.loc[count] = [item['sku']]
+                        tempList.append(df.loc[count])                              
+                        count+=1
+                
+                print(df)
+                print(tempList)
                 suggestedProducts,discountPerc = recommend(app_id,tempList)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
