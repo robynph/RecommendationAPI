@@ -50,7 +50,7 @@ def loadStoreData():
                     lineItems = eachOrder['line_items']
                     
                     for item in lineItems:
-                        print("items ::", item['sku'])
+                        #print("items ::", item['sku'])
                         df.loc[count] = [orderId, item['sku']]
                         count+=1
                         
@@ -95,10 +95,8 @@ def genRecommendation():
                 for eachProduct in selectedProducts:
                     variants = eachProduct['variants']
                     
-                    print("sku ::", variants['sku'])
-                    
                     for item in variants:
-                        print("items ::", item['sku'])
+                        print("items ::", [item['sku']])
                         #df.loc[count] = [item['sku']]
                         #tempList.append(df.loc[count])                              
                         count+=1
