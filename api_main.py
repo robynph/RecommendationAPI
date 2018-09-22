@@ -202,8 +202,8 @@ def ques():
         return jsonify({"Status" : "S","Message" : message,"Questions" : ques})
 
 
-@app.route("/revTable", methods=['POST', 'PUT'])
-def revTable():
+@app.route("/revData", methods=['POST', 'PUT'])
+def revData():
 
     if request.method == 'POST':
         try:
@@ -221,49 +221,17 @@ def revTable():
                 return jsonify({"Status" : "F", "Message" : value})
 
             message = ("Data for App Id {} uploaded successfully." .format(app_id))
-            tabledata = ({"app_id":app_id,"period":{"Week 1":{"Order Count":"150","Total Bundles Recommended":"1500","Total Bundles Purchased":"250","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 2":{"Order Count":"300","Total Bundles Recommended":"2000", \
-            "Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 3":{"Order Count":"250","Total Bundles Recommended":"1700","Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"}, \
-            "Week 4":{"Order Count":"300","Total Bundles Recommended":"2500","Total Bundles Purchased":"750","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"}}})
+            tabledata = ({"app_id":"appID","Data":{"actual":{"Week 1":{"% Revenue Increase":"##%","Order Count":"150","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"250","Total Bundles Recommended":"1500"},\
+            "Week 2":{"% Revenue Increase":"##%","Order Count":"300","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"500","Total Bundles Recommended":"2000"},\
+            "Week 3":{"% Revenue Increase":"##%","Order Count":"250","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"500","Total Bundles Recommended":"1700"},\
+            "Week 4":{"% Revenue Increase":"##%","Order Count":"300","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"750","Total Bundles Recommended":"2500"}},\
+            "forecast":{"Week 5":{"Forecast Bundled Revenue":"$#####","Forecast Revenue":"$####"},"Week 6":{"Forecast Bundled Revenue":"$#####","Forecast Revenue":"$####"},"Week 7":{"Forecast Bundled Revenue":"$#####","Forecast Revenue":"$####"},\
+            "Week 8":{"Forecast Bundled Revenue":"$#####","Forecast Revenue":"$####"}}},"Message":"Data for App Id App Id1 uploaded successfully.","Status":"S"})
 
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
 
         return jsonify({"Status" : "S","Message" : message, "Table Data" : tabledata})
-
-
-@app.route("/revChart", methods=['POST', 'PUT'])
-def revChart():
-
-    if request.method == 'POST':
-        try:
-
-            print("Received value of request :: ", request)
-
-            req = request.get_json()
-            print("Received value of req :: ", jsonify(req))
-
-            flag,value = validator(req, "app_id")
-            if(flag):
-                app_id = value
-                print("Validated ",app_id)
-            else:
-                return jsonify({"Status" : "F", "Message" : value})
-
-            message = ("Data for App Id {} uploaded successfully." .format(app_id))
-            chartdata = ({"app_id":"appID","actual":{"Week 1":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
-            "Week 2":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
-            "Week 3":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
-            "Week 4":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
-            },"forecast":{"Week 5":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
-            "Week 6":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
-            "Week 7":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
-            "Week 8":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"},}})
-
-        except ValueError:
-            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
-
-        return jsonify({"Status" : "S","Message" : message, "Chart Data" : chartdata})
-
 
 
 @app.route("/confirmPurchase", methods=['POST', 'PUT'])
