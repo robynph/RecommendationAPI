@@ -221,10 +221,10 @@ def revData():
                 return jsonify({"Status" : "F", "Message" : value})
 
             message = ("Data for App Id {} uploaded successfully." .format(app_id))
-            tabledata = ({"app_id":"appID","Data":{"actual":{"Week 1":{"% Revenue Increase":"##%","Order Count":"150","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"250","Total Bundles Recommended":"1500"},\
-            "Week 2":{"% Revenue Increase":"##%","Order Count":"300","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"500","Total Bundles Recommended":"2000"},\
-            "Week 3":{"% Revenue Increase":"##%","Order Count":"250","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"500","Total Bundles Recommended":"1700"},\
-            "Week 4":{"% Revenue Increase":"##%","Order Count":"300","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"750","Total Bundles Recommended":"2500"}},\
+            tabledata = ({"app_id":"appID","Data":{"actual":{"Week 1":{"% Revenue Increase":"##%","Order Count":"150","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"250","Total Bundles Recommended":"1500","Revenue Lift":"$###"},\
+            "Week 2":{"% Revenue Increase":"##%","Order Count":"300","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"500","Total Bundles Recommended":"2000","Revenue Lift":"$###"},\
+            "Week 3":{"% Revenue Increase":"##%","Order Count":"250","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"500","Total Bundles Recommended":"1700","Revenue Lift":"$###"},\
+            "Week 4":{"% Revenue Increase":"##%","Order Count":"300","Original Revenue":"$####","Total Bundled Revenue":"$#####","Total Bundles Purchased":"750","Total Bundles Recommended":"2500","Revenue Lift":"$###"}},\
             "forecast":{"Week 5":{"Forecast Bundled Revenue":"$#####","Forecast Revenue":"$####"},"Week 6":{"Forecast Bundled Revenue":"$#####","Forecast Revenue":"$####"},"Week 7":{"Forecast Bundled Revenue":"$#####","Forecast Revenue":"$####"},\
             "Week 8":{"Forecast Bundled Revenue":"$#####","Forecast Revenue":"$####"}}},"Message":"Data for App Id App Id1 uploaded successfully.","Status":"S"})
 
