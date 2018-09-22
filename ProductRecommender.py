@@ -27,15 +27,15 @@ def getOrderData(app_ID, ordersDF):
     'Step 1: Generate folder for the received app ID if it doesnot exist'
     'Step 2: Generate Rules'
     'Step 3: Store the rules in pickle format in the folder created in step 1'
-    '''
+    
     'Step 1'
     if not (os.path.isdir(app_ID)):
         os.mkdir(app_ID)
-    '''
+    
     'Step 2'
     rules = generateRules(ordersDF)    
     'Step 3'
-    joblib.dump(rules, "apriori_product_recommender.pkl")
+    joblib.dump(rules, app_ID + "/apriori_product_recommender_NEW.pkl")
     print("Rules shape :: ",np.shape(rules))
 
 def generateRules(orders):
@@ -109,8 +109,9 @@ def generateRules(orders):
 
 def recommend(app_id, listselprod):
     
-    rules = joblib.load("apriori_product_recommender.pkl")
-                        
+    #rules = joblib.load("apriori_product_recommender.pkl")
+    rules = joblib.load(app_id + "/apriori_product_recommender_NEW.pkl") 
+                       
     suggestedProducts = recommendProducts(rules, listselprod)
     
     #Dummy value
