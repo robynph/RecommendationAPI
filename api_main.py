@@ -173,8 +173,8 @@ def extra():
         return jsonify({"Status" : "S"})
 
 
-@app.route("/qSetup", methods=['POST', 'PUT'])
-def qSetup():
+@app.route("/ques", methods=['POST', 'PUT'])
+def ques():
 
     if request.method == 'POST':
         try:
@@ -192,38 +192,15 @@ def qSetup():
                 return jsonify({"Status" : "F", "Message" : value})
 
             message = ("Data for App Id {} uploaded successfully." .format(app_id))
-            ques = ({"app_id" : app_id , "Questions":"will update"})
+            ques = ({"app_id":"appID","model_id":{"Model id1":[{"Q1":"What will be the flat rate discount?","Type":"float","Range":"0-100","A1":"answer"},\
+            {"Q2":"Which items (if any) will have modified discounts?","Type":"JSON (python dictionary)","Key":"string (ID) - product picker","Table Format":"polaris comp table to add new line","Value":"Type:float,Range:0-100","A2":"answer"},\
+            {"Q3":"Which items will be exluded from any bundle?","Type":"stack, dynamic list","Key":"string (ID) - product picker","Table Format":"polaris comp table to add new line","A3":"answer"}]}})
 
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
 
         return jsonify({"Status" : "S","Message" : message,"Questions" : ques})
 
-
-@app.route("/qAnswers", methods=['POST', 'PUT'])
-def qAnswers():
-
-    if request.method == 'POST':
-        try:
-
-            print("Received value of request :: ", request)
-
-            req = request.get_json()
-            print("Received value of req :: ", jsonify(req))
-
-            flag,value = validator(req, "app_id")
-            if(flag):
-                app_id = value
-                print("Validated ",app_id)
-            else:
-                return jsonify({"Status" : "F", "Message" : value})
-
-            message = ("Data for App Id {} uploaded successfully." .format(app_id))
-
-        except ValueError:
-            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
-
-        return jsonify({"Status" : "S","Message" : message})
 
 @app.route("/revTable", methods=['POST', 'PUT'])
 def revTable():
