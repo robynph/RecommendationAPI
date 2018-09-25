@@ -157,3 +157,6 @@ def recommendProducts(rules, listselprod):
     
     print(conse)   
     return conse
+
+
+

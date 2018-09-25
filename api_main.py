@@ -89,7 +89,7 @@ def genRecommendation():
                 selectedProducts = value
                 
                 tempList = []                
-                df = pd.DataFrame(columns=['SKU'])
+                #df = pd.DataFrame(columns=['SKU'])
                 count = 0
                 
                 for eachProduct in selectedProducts:
@@ -104,6 +104,7 @@ def genRecommendation():
                 #print(df)
                 print("templist ::", tempList)
                 suggestedProducts,discountPerc = recommend(app_id,tempList)
+                
             else:
                 return jsonify({"Status" : "F", "Message" : value})
 
@@ -127,6 +128,53 @@ def feedback():
         else:
             return jsonify({"Status" : "F", "Message" : value})
         
+        flag,value = validator(req, "orders")
+        if(flag):
+                
+            orders = value       
+            print("Total orders :: ",len(orders))
+            df = pd.DataFrame(columns=['Order ID', 'SKU'])
+            count = 0
+            for eachOrder in orders:
+                orderId = eachOrder['id']
+                lineItems = eachOrder['line_items']
+                
+                for item in lineItems:
+                    #print("items ::", item['sku'])
+                    df.loc[count] = [orderId, item['sku']]
+                    count+=1
+                    
+            getOrderData(app_id, df)
+                
+            print("Validated ",app_id)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        flag,value = validator(req, "products")
+        if(flag):
+            selectedProducts = value
+            
+            tempList = []                
+            #df = pd.DataFrame(columns=['SKU'])
+            count = 0
+            
+            for eachProduct in selectedProducts:
+                variants = eachProduct['variants']
+                
+                for item in variants:
+                    print("items ::", [item['sku']])
+                    #df.loc[count] = [item['sku']]
+                    tempList.append(item['sku'])                              
+                    count+=1
+                   
+            #print(df)
+            print("templist ::", tempList)
+            suggestedProducts,discountPerc = recommend(app_id,tempList)
+                
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+                
+        '''
         flag,value = validator(req, "Ids")
         if(flag):
             orderId = value
@@ -144,7 +192,8 @@ def feedback():
             
         else:
             return jsonify({"Status" : "F", "Message" : value})
-    
+        '''
+        
     except ValueError:
         return jsonify({"Status" : "F", "Message" : "Please provide the valid data."})
 
