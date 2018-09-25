@@ -7,7 +7,7 @@ Created on Tue Sep 18 14:36:42 2018
 
 from flask import Flask, request, jsonify
 
-from ProductRecommender import recommend, getOrderData
+from ProductRecommender import recommend, getOrderData, revenuelift
 import pandas as pd
 app = Flask(__name__)
 
@@ -155,22 +155,25 @@ def feedback():
             selectedProducts = value
             
             tempList = []                
-            #df = pd.DataFrame(columns=['SKU'])
+            df_sel = pd.DataFrame(columns=['ID','SKU','Price'])
             count = 0
             
             for eachProduct in selectedProducts:
                 variants = eachProduct['variants']
                 
                 for item in variants:
-                    print("items ::", [item['sku']])
-                    #df.loc[count] = [item['sku']]
+                    #print("items ::", [item['sku']])
+                    #This is for feedback module
                     tempList.append(item['sku'])                              
+                    
+                    #This is for revenue lift calculations
+                    df_sel.loc[count] = [item['id'],item['sku'],item['price']]
                     count+=1
                    
             #print(df)
             print("templist ::", tempList)
             suggestedProducts,discountPerc = recommend(app_id,tempList)
-                
+            revenue_lift = revenuelift(df_sel)    
         else:
             return jsonify({"Status" : "F", "Message" : value})
                 

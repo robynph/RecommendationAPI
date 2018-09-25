@@ -158,5 +158,8 @@ def recommendProducts(rules, listselprod):
     print(conse)   
     return conse
 
-
+def revenuelift(df_sel):
+    df = df_sel
+    
+    return df
 
