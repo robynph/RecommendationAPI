@@ -197,7 +197,7 @@ def feedback():
     except ValueError:
         return jsonify({"Status" : "F", "Message" : "Please provide the valid data."})
 
-    return jsonify({"Status" : "S"})
+    return jsonify({"Status" : "S  = Feedback module implemented"})
 
 
 
