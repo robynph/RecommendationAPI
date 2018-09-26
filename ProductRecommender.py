@@ -161,6 +161,7 @@ def recommendProducts(rules, listselprod):
 def revenuelift(df_primary, df_recommended, discount):
     temp1 = pd.to_numeric(df_primary["Price"])
     temp2 = pd.to_numeric(df_recommended["Price"])
+    discount = pd.to_numeric(discount)
     
     rev = temp1.sum()
     extra_rev = temp2.sum()
