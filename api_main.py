@@ -203,6 +203,45 @@ def feedback():
     return jsonify({"Status" : "S  = Feedback module implemented","Revenue Lift": revenue_lift})
 
 
+@app.route("/revlift", methods=['POST'])
+def revlift():
+    
+    try:
+        req = request.get_json()
+        print("Received value of req :: ",req)
+        
+        flag,value = validator(req, "app_id")
+        if(flag):
+            app_id = value
+            print("Validated ",app_id)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        flag,value = validator(req, "products")
+        if(flag):
+            selectedProducts = value
+                       
+            df_sel = pd.DataFrame(columns=['ID','SKU','Price'])
+            count = 0
+            
+            for eachProduct in selectedProducts:
+                variants = eachProduct['variants']
+                
+                for item in variants:
+                    #This is for revenue lift calculations
+                    df_sel.loc[count] = [item['id'],item['sku'],item['price']]
+                    count+=1
+                       
+            revenue_lift = revenuelift(df_sel)    
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+                
+      
+    except ValueError:
+        return jsonify({"Status" : "F", "Message" : "Please provide the valid data."})
+
+    return jsonify({"Status" : "S  = Feedback module implemented","Revenue Lift": revenue_lift})
+
 
 @app.route("/extra", methods=['POST','PUT'])
 def extra():
