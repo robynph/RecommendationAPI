@@ -217,30 +217,59 @@ def revlift():
         else:
             return jsonify({"Status" : "F", "Message" : value})
         
+        #fetching the store provided discount
+        flag,value = validator(req, "discount")
+        if(flag):
+            discount = value
+            print("Validated ",discount)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        #Using the orders API to fetch the details of the main products being selected
+        flag,value = validator(req, "orders")
+        if(flag):
+                
+            orders = value       
+            #print("Total orders :: ",len(orders))
+            df_primary = pd.DataFrame(columns=['ID','SKU','Price'])
+            count = 0
+            for eachOrder in orders:
+                #orderId = eachOrder['id']
+                lineItems = eachOrder['line_items']
+                
+                for item in lineItems:
+                    df_primary.loc[count] = [item['id'],item['sku'],item['price']]
+                    count+=1
+                    
+            print("Validated ",app_id)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        
+        #Using products API to fetch the extra products selected along with main ordered products
         flag,value = validator(req, "products")
         if(flag):
             selectedProducts = value
                        
-            df_sel = pd.DataFrame(columns=['ID','SKU','Price'])
+            df_recommended = pd.DataFrame(columns=['ID','SKU','Price'])
             count = 0
             
             for eachProduct in selectedProducts:
                 variants = eachProduct['variants']
                 
                 for item in variants:
-                    #This is for revenue lift calculations
-                    df_sel.loc[count] = [item['id'],item['sku'],item['price']]
+                    df_recommended.loc[count] = [item['id'],item['sku'],item['price']]
                     count+=1
-                       
-            revenue_lift = revenuelift(df_sel)    
+               
         else:
             return jsonify({"Status" : "F", "Message" : value})
                 
-      
     except ValueError:
         return jsonify({"Status" : "F", "Message" : "Please provide the valid data."})
-
-    return jsonify({"Status" : "S  = Feedback module implemented","Revenue Lift": revenue_lift})
+    
+    
+    revenue_lift = revenuelift(df_primary,df_recommended,discount) 
+    return jsonify({"Status" : "S  = Revenue Lift Calculated \n","Revenue Lift =" : revenue_lift})
 
 
 @app.route("/extra", methods=['POST','PUT'])

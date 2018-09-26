@@ -158,8 +158,19 @@ def recommendProducts(rules, listselprod):
     print(conse)   
     return conse
 
-def revenuelift(df_sel):
-    dict1 = df_sel.to_dict()
+def revenuelift(df_primary, df_recommended, discount):
+    temp1 = pd.to_numeric(df_primary["Price"])
+    temp2 = pd.to_numeric(df_recommended["Price"])
     
-    return dict1
+    rev = temp1.sum()
+    extra_rev = temp2.sum()
+    print("Main revenue is :: ", rev)
+    print("extra revenue is :: ", extra_rev)
+    print("Discount offered is :: ", discount)
+    
+    rev_lift = rev + extra_rev - discount
+    
+    print("revenue lift is ::", rev_lift)
+    
+    return rev_lift
 
