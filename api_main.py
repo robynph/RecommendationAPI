@@ -263,7 +263,7 @@ def revlift():
     
     
     revenue_lift = revenuelift(df_primary,df_recommended,discount) 
-    return jsonify({"Status" : "S  = Revenue Lift Calculated",  "Revenue Lift": revenue_lift})
+    return jsonify({"Status" : "S  = Revenue Lift Calculated",  "Revenue Lift" : revenue_lift})
 
 
 @app.route("/extra", methods=['POST','PUT'])
