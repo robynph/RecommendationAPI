@@ -169,7 +169,7 @@ def revenuelift(df_primary, df_recommended, discount):
     print("extra revenue is :: ", extra_rev)
     print("Discount offered is :: ", discount)
     
-    rev_lift = rev + extra_rev - discount
+    rev_lift = round(rev + extra_rev - discount,2)
     
     print("revenue lift is ::", rev_lift)
     
