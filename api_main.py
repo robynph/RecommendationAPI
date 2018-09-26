@@ -166,14 +166,8 @@ def feedback():
                     #This is for feedback module
                     tempList.append(item['sku'])                              
                     
-                    #This is for revenue lift calculations
-                    df_sel.loc[count] = [item['id'],item['sku'],item['price']]
-                    count+=1
-            
-            print("selected df",df_sel)                   
-            print("templist ::", tempList)
             suggestedProducts,discountPerc = recommend(app_id,tempList)
-            revenue_lift = revenuelift(df_sel)    
+               
         else:
             return jsonify({"Status" : "F", "Message" : value})
                 
@@ -200,7 +194,7 @@ def feedback():
     except ValueError:
         return jsonify({"Status" : "F", "Message" : "Please provide the valid data."})
 
-    return jsonify({"Status" : "S  = Feedback module implemented","Revenue Lift": revenue_lift})
+    return jsonify({"Status" : "S  = Feedback module implemented"})
 
 
 @app.route("/revlift", methods=['POST'])
@@ -269,7 +263,7 @@ def revlift():
     
     
     revenue_lift = revenuelift(df_primary,df_recommended,discount) 
-    return jsonify({"Status" : "S  = Revenue Lift Calculated \n","Revenue Lift =" : revenue_lift})
+    return jsonify({"Status" : "S  = Revenue Lift Calculated",  "Revenue Lift": revenue_lift})
 
 
 @app.route("/extra", methods=['POST','PUT'])
