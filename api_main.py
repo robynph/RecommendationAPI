@@ -183,7 +183,7 @@ def ques():
 
             req = request.get_json()
             print("Received value of req :: ", jsonify(req))
-            modelID = req_data['model_id']
+            modelID = req['model_id']
 
             flag,value = validator(req, "app_id")
             if(flag):
