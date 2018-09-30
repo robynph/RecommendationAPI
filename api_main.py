@@ -183,7 +183,7 @@ def ques():
 
             req = request.get_json()
             print("Received value of req :: ", jsonify(req))
-
+            modelID = req.data['model_id']
             flag,value = validator(req, "app_id")
             if(flag):
                 app_id = value
@@ -192,7 +192,7 @@ def ques():
                 return jsonify({"Status" : "F", "Message" : value})
 
             message = ("Data for App Id {} uploaded successfully." .format(app_id))
-            ques = ({"app_id":"appID","model_id":{"Model id1":[{"Q1":"What will be the flat rate discount?","Type":"float","Range":"0-100","A1":"answer"},\
+            ques = ({"app_id":"appID","model_id":{modelID:[{"Q1":"What will be the flat rate discount?","Type":"float","Range":"0-100","A1":"answer"},\
             {"Q2":"How many bundles to show on product page?","Type":"float","Range":"0-100","A2":"answer"},\
             {"Q3":"Which items will be exluded from any bundle?","Type":"stack, dynamic list","Key":"string (ID) - product picker","A3":"answer"}]}})
 
