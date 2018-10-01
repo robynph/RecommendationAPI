@@ -6,7 +6,7 @@ Created on Tue Sep 18 14:36:42 2018
 """
 
 from flask import Flask, request, jsonify
-
+import urllib2
 from ProductRecommender import recommend, getOrderData, revenuelift
 import pandas as pd
 app = Flask(__name__)
@@ -110,8 +110,11 @@ def genRecommendation():
 
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
-
-        return jsonify({"Status" : "S" ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
+        
+        contract_url = "https://solapi.herokuapp.com/postTrans"
+        contract_response = urllib2.urlopen(contract_url)
+        
+        return jsonify({"Status" : "S" ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc, "Contract API response ::" : contract_response})
        
     
 @app.route("/feedback", methods=['POST'])
@@ -264,6 +267,72 @@ def revlift():
     
     revenue_lift = revenuelift(df_primary,df_recommended,discount) 
     return jsonify({"Status" : "S  = Revenue Lift Calculated",  "Revenue Lift" : revenue_lift})
+
+
+
+@app.route("/revTable", methods=['POST', 'PUT'])
+def revTable():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            tabledata = ({"app_id":app_id,"period":{"Week 1":{"Order Count":"150","Total Bundles Recommended":"1500","Total Bundles Purchased":"250","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 2":{"Order Count":"300","Total Bundles Recommended":"2000", \
+            "Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 3":{"Order Count":"250","Total Bundles Recommended":"1700","Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"}, \
+            "Week 4":{"Order Count":"300","Total Bundles Recommended":"2500","Total Bundles Purchased":"750","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"}}})
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message, "Table Data" : tabledata})
+
+
+@app.route("/revChart", methods=['POST', 'PUT'])
+def revChart():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            chartdata = ({"app_id":"appID","actual":{"Week 1":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 2":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 3":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 4":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            },"forecast":{"Week 5":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 6":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 7":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 8":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"},}})
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message, "Chart Data" : chartdata})
+
+@app.route("/confirmPurchase", methods=['POST', 'PUT'])
 
 
 @app.route("/extra", methods=['POST','PUT'])
