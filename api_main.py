@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Sep 10 18:24:13 2018
+Created on Tue Sep 18 14:36:42 2018
 
-@author: Monika Asawa
+@author: Viraj
 """
+
 from flask import Flask, request, jsonify
-
-from ProductRecommender import recommend
-
+import urllib2
+from ProductRecommender import recommend, getOrderData, revenuelift
+import pandas as pd
 app = Flask(__name__)
 
 @app.route("/")
@@ -36,13 +37,24 @@ def loadStoreData():
             else:
                 return jsonify({"Status" : "F", "Message" : value})
             
-            flag,value = validator(req, "Orders")
+            flag,value = validator(req, "orders")
             if(flag):
                 
                 orders = value
                 
+                print("Total orders :: ",len(orders))
+                df = pd.DataFrame(columns=['Order ID', 'SKU'])
+                count = 0
                 for eachOrder in orders:
-                        print(eachOrder["Ids"],eachOrder["line_items"])
+                    orderId = eachOrder['id']
+                    lineItems = eachOrder['line_items']
+                    
+                    for item in lineItems:
+                        #print("items ::", item['sku'])
+                        df.loc[count] = [orderId, item['sku']]
+                        count+=1
+                        
+                getOrderData(app_id, df)
                         
                 print("Validated ",app_id)
             else:
@@ -71,26 +83,38 @@ def genRecommendation():
                 print("Validated ",app_id)
             else:
                 return jsonify({"Status" : "F", "Message" : value})
-            
-            flag,value = validator(req, "Ids")
-            if(flag):
-                orderId = value
-                print("Validated ",orderId)
-            else:
-                return jsonify({"Status" : "F", "Message" : value})
-            
-            
-            flag,value = validator(req, "SelectedProducts")
+                       
+            flag,value = validator(req, "products")
             if(flag):
                 selectedProducts = value
-                suggestedProducts,discountPerc = recommend(selectedProducts)
+                
+                tempList = []                
+                #df = pd.DataFrame(columns=['SKU'])
+                count = 0
+                
+                for eachProduct in selectedProducts:
+                    variants = eachProduct['variants']
+                    
+                    for item in variants:
+                        print("items ::", [item['sku']])
+                        #df.loc[count] = [item['sku']]
+                        tempList.append(item['sku'])                              
+                        count+=1
+                       
+                #print(df)
+                print("templist ::", tempList)
+                suggestedProducts,discountPerc = recommend(app_id,tempList)
+                
             else:
                 return jsonify({"Status" : "F", "Message" : value})
 
         except ValueError:
             return jsonify({"Status" : "F", "Message" : "Please provide the selected product names."})
-
-        return jsonify({"Status" : "S",  "Ids" : orderId ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc})
+        
+        contract_url = "https://solapi.herokuapp.com/postTrans"
+        contract_response = urllib2.urlopen(contract_url)
+        
+        return jsonify({"Status" : "S" ,"SuggestedProducts": suggestedProducts, "Discount" : discountPerc, "Contract API response ::" : contract_response})
        
     
 @app.route("/feedback", methods=['POST'])
@@ -107,6 +131,50 @@ def feedback():
         else:
             return jsonify({"Status" : "F", "Message" : value})
         
+        flag,value = validator(req, "orders")
+        if(flag):
+                
+            orders = value       
+            print("Total orders :: ",len(orders))
+            df = pd.DataFrame(columns=['Order ID', 'SKU'])
+            count = 0
+            for eachOrder in orders:
+                orderId = eachOrder['id']
+                lineItems = eachOrder['line_items']
+                
+                for item in lineItems:
+                    #print("items ::", item['sku'])
+                    df.loc[count] = [orderId, item['sku']]
+                    count+=1
+                    
+            getOrderData(app_id, df)
+                
+            print("Validated ",app_id)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        flag,value = validator(req, "products")
+        if(flag):
+            selectedProducts = value
+            
+            tempList = []                
+            df_sel = pd.DataFrame(columns=['ID','SKU','Price'])
+            count = 0
+            
+            for eachProduct in selectedProducts:
+                variants = eachProduct['variants']
+                
+                for item in variants:
+                    #print("items ::", [item['sku']])
+                    #This is for feedback module
+                    tempList.append(item['sku'])                              
+                    
+            suggestedProducts,discountPerc = recommend(app_id,tempList)
+               
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+                
+        '''
         flag,value = validator(req, "Ids")
         if(flag):
             orderId = value
@@ -124,12 +192,147 @@ def feedback():
             
         else:
             return jsonify({"Status" : "F", "Message" : value})
-    
+        '''
+        
     except ValueError:
         return jsonify({"Status" : "F", "Message" : "Please provide the valid data."})
 
-    return jsonify({"Status" : "S"})
+    return jsonify({"Status" : "S  = Feedback module implemented"})
 
+
+@app.route("/revlift", methods=['POST'])
+def revlift():
+    
+    try:
+        req = request.get_json()
+        print("Received value of req :: ",req)
+        
+        flag,value = validator(req, "app_id")
+        if(flag):
+            app_id = value
+            print("Validated ",app_id)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        #fetching the store provided discount
+        flag,value = validator(req, "discount")
+        if(flag):
+            discount = value
+            print("Validated ",discount)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        #Using the orders API to fetch the details of the main products being selected
+        flag,value = validator(req, "orders")
+        if(flag):
+                
+            orders = value       
+            #print("Total orders :: ",len(orders))
+            df_primary = pd.DataFrame(columns=['ID','SKU','Price'])
+            count = 0
+            for eachOrder in orders:
+                #orderId = eachOrder['id']
+                lineItems = eachOrder['line_items']
+                
+                for item in lineItems:
+                    df_primary.loc[count] = [item['id'],item['sku'],item['price']]
+                    count+=1
+                    
+            print("Validated ",app_id)
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+        
+        
+        #Using products API to fetch the extra products selected along with main ordered products
+        flag,value = validator(req, "products")
+        if(flag):
+            selectedProducts = value
+                       
+            df_recommended = pd.DataFrame(columns=['ID','SKU','Price'])
+            count = 0
+            
+            for eachProduct in selectedProducts:
+                variants = eachProduct['variants']
+                
+                for item in variants:
+                    df_recommended.loc[count] = [item['id'],item['sku'],item['price']]
+                    count+=1
+               
+        else:
+            return jsonify({"Status" : "F", "Message" : value})
+                
+    except ValueError:
+        return jsonify({"Status" : "F", "Message" : "Please provide the valid data."})
+    
+    
+    revenue_lift = revenuelift(df_primary,df_recommended,discount) 
+    return jsonify({"Status" : "S  = Revenue Lift Calculated",  "Revenue Lift" : revenue_lift})
+
+
+
+@app.route("/revTable", methods=['POST', 'PUT'])
+def revTable():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            tabledata = ({"app_id":app_id,"period":{"Week 1":{"Order Count":"150","Total Bundles Recommended":"1500","Total Bundles Purchased":"250","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 2":{"Order Count":"300","Total Bundles Recommended":"2000", \
+            "Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"},"Week 3":{"Order Count":"250","Total Bundles Recommended":"1700","Total Bundles Purchased":"500","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"}, \
+            "Week 4":{"Order Count":"300","Total Bundles Recommended":"2500","Total Bundles Purchased":"750","Original Revenue":"$####","Total Bundled Revenue":"$#####","% Revenue Increase":"##%"}}})
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message, "Table Data" : tabledata})
+
+
+@app.route("/revChart", methods=['POST', 'PUT'])
+def revChart():
+
+    if request.method == 'POST':
+        try:
+
+            print("Received value of request :: ", request)
+
+            req = request.get_json()
+            print("Received value of req :: ", jsonify(req))
+
+            flag,value = validator(req, "app_id")
+            if(flag):
+                app_id = value
+                print("Validated ",app_id)
+            else:
+                return jsonify({"Status" : "F", "Message" : value})
+
+            message = ("Data for App Id {} uploaded successfully." .format(app_id))
+            chartdata = ({"app_id":"appID","actual":{"Week 1":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 2":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 3":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            "Week 4":  {"Original Revenue" : "$####", "Total Bundled Revenue" : "$#####"}, \
+            },"forecast":{"Week 5":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 6":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 7":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"}, \
+            "Week 8":  {"Forecast Revenue" : "$####", "Forecast Bundled Revenue" : "$#####"},}})
+
+        except ValueError:
+            return jsonify({"Status" : "F", "Message" : "Please provide the valid data for orders."})
+
+        return jsonify({"Status" : "S","Message" : message, "Chart Data" : chartdata})
+
+@app.route("/confirmPurchase", methods=['POST', 'PUT'])
 
 
 @app.route("/extra", methods=['POST','PUT'])
@@ -190,9 +393,9 @@ def validator(req, parameterName):
             flag = True
         
         else:
-            value = ('%s parameter cannot be blank.'.format(parameterName))
+            value = ('{}.format parameter cannot be blank.'.format(parameterName))
     
     else:
-        value = ('%s parameter not passed.'.format(parameterName))
+        value = ('{}.format parameter not passed.'.format(parameterName))
     
     return flag,value
